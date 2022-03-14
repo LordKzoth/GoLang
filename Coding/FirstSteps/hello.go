@@ -5,13 +5,21 @@ import (
 )
 
 func main() {
-	var start, percent, goal int
-	fmt.Scan(&start, &percent, &goal)
+	var workArray [10]int
+	var changes [6]int
 
-	var years int = 0
-	for currentSum := start; currentSum < goal; currentSum += int(float64(currentSum) * (float64(percent) / 100)) {
-		years++
+	for index := 0; index < 16; index++ {
+		if index < 10 {
+			fmt.Scan(&workArray[index])
+		} else {
+			fmt.Scan(&changes[index-10])
+		}
 	}
 
-	fmt.Println(years)
+	for index := 0; index < 6; index += 2 {
+		workArray[changes[index]], workArray[changes[index+1]] = workArray[changes[index+1]], workArray[changes[index]]
+	}
+
+	fmt.Println(workArray)
+	fmt.Println(changes)
 }
