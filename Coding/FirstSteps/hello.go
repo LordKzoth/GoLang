@@ -1,16 +1,15 @@
-// Объявление нового пакета
 package main
 
-// Импорт пакета
 import "fmt"
 
-func main() { // Entry point
-	var (
-		name, surname string
-	)
+func main() {
+	var start, percent, goal int
+	fmt.Scan(&start, &percent, &goal)
 
-	fmt.Println("Hi, who are you?")
-	fmt.Scan(&name, &surname)
+	var years int = 0
+	for currentSum := start; currentSum < goal; currentSum += int(float64(currentSum) * (float64(percent) / 100)) {
+		years++
+	}
 
-	fmt.Println("Hello, " + name + " " + surname + "!")
+	fmt.Println(years)
 }
