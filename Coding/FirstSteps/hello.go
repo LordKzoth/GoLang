@@ -12,5 +12,5 @@ func main() { // Entry point
 	fmt.Println("Hi, who are you?")
 	fmt.Scan(&name, &surname)
 
-	fmt.Println("Hello, " + name + " " + surname)
+	fmt.Println("Hello, " + name + " " + surname + "!")
 }
