@@ -25,7 +25,6 @@ type WiFiNetworkTools interface {
 }
 
 // === DEFINITION PART ===
-
 func (wifi WiFiNetwork) PrintWiFiInfo() {
 	// Some code
 }
