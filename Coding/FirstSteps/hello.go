@@ -1,15 +1,30 @@
 package main
 
 import (
-	"fmt"
+    "fmt"
+    "strconv"
 )
 
 func main() {
-	var slice []int = []int{1, 2, 3}
-	fmt.Println(slice)
+    var userInput string
+    fmt.Scan(&userInput)
+    fmt.Println(FindRoot(userInput))
+}
 
-	slice = append(slice, 4, 5)
-	fmt.Println(slice)
+func FindRoot(number string) string{
+    if len(number) > 1 {
+        return FindRoot(DigitsSum(number))
+    } else {
+        return number
+    }
+}
 
-	fmt.Printf("%p", slice)
+func DigitsSum(number string) string {
+    var result int
+    for _, element := range number {
+        result += int(element)
+    }
+    
+    result -= len(number) * '0'
+    return strconv.Itoa(result)
 }
