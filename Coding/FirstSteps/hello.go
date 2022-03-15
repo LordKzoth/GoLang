@@ -1,30 +1,21 @@
 package main
 
 import (
-    "fmt"
-    "strconv"
+	"fmt"
 )
 
 func main() {
-    var userInput string
-    fmt.Scan(&userInput)
-    fmt.Println(FindRoot(userInput))
+	fmt.Println(twoSum([]int{2,7,11,15}, 9))
 }
 
-func FindRoot(number string) string{
-    if len(number) > 1 {
-        return FindRoot(DigitsSum(number))
-    } else {
-        return number
+func twoSum(nums []int, target int) []int {
+    lookup := make(map[int]int)
+    for i, v := range nums {
+        j, ok := lookup[-v]
+        lookup[v - target] = i
+        if ok {
+            return []int{j, i}
+        }
     }
-}
-
-func DigitsSum(number string) string {
-    var result int
-    for _, element := range number {
-        result += int(element)
-    }
-    
-    result -= len(number) * '0'
-    return strconv.Itoa(result)
+    return []int{}
 }
