@@ -1,5 +1,9 @@
 package main
 
+// import (
+// 	"fmt"
+// )
+
 // === DECLARATION PART ===
 type WiFiNetwork struct {
 	// = Information
@@ -22,10 +26,10 @@ type WiFiNetworkTools interface {
 
 // === DEFINITION PART ===
 
-func PrintWiFiInfo() {
+func (wifi WiFiNetwork) PrintWiFiInfo() {
 	// Some code
 }
 
-func AddBSSIDInfo(_BSSID string, _Signal int, _WLANStandart string) {
+func (wifi WiFiNetwork) AddBSSIDInfo(_BSSID string, _Signal int, _WLANStandart string) {
 	// Some code
 }
