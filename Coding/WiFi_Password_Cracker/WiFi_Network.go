@@ -42,6 +42,8 @@ func (wifi WiFiNetwork) PrintWiFiInfo() {
 	
 	if wifi.Password != "" {
 		color = colorGreen
+	} else if wifi.AuthenticationMethod == "Open" {
+		color = colorYellow
 	} else {
 		color = colorReset
 	}
