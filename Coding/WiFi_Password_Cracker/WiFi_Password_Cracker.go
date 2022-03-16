@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+var (
+	Wlans []WiFiNetwork
+)
+
+
 func main() {
 	// = Information about Project
 	fmt.Printf("= Welcome in SpideRUS WiFi Password Cracker! =\n\n")
@@ -42,7 +47,19 @@ func main() {
 	// == Parse Data
 	for _, line := range strings.Split(string(WlanInfo), "\r\n") {
 		if regexp.MustCompile("^SSID").MatchString(line) {
-			fmt.Println(line)
+			temp := strings.Fields(line)
+			Wlans = append(Wlans, WiFiNetwork{SSID: temp[len(temp) - 1]})			
+		} else {
+			switch {
+			case strings.Contains(line, "Authentication"):
+				temp := strings.Fields(line)
+				Wlans[len(Wlans) - 1].AuthenticationMethod = temp[len(temp) - 1]
+
+			case strings.Contains(line, "Encryption"):
+				temp := strings.Fields(line)
+				Wlans[len(Wlans) - 1].EncryprionMethod = temp[len(temp) - 1]
+
+			}
 		}
 	}
 

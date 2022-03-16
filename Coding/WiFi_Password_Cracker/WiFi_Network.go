@@ -9,7 +9,7 @@ type WiFiNetwork struct {
 	// = Information
 	SSID 					string 		// WLAN network name
 	// = Authentification
-	AuthentificationMethod 	string
+	AuthenticationMethod 	string
 	EncryprionMethod       	string
 	Password             	string
 	// = Connection
