@@ -10,5 +10,15 @@ func main() {
 
     *b++
 
-    fmt.Println(*b)
+    fmt.Println(a, *b)
+
+    var c **int = &b;
+
+    fmt.Println(a, *b, **c)
+
+    **c++
+
+    fmt.Println(a, *b, **c)
+    fmt.Println(b, *c, c)
+
 }
