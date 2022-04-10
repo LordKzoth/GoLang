@@ -2,23 +2,19 @@ package main
 
 import (
 	"fmt"
+	"math"
 )
 
 func main() {
-	var a int = 1
-    var b *int = &a
+	object := Circle{0, 0, 5}
+    fmt.Println(object.GetArea())
+}
 
-    *b++
+type Circle struct {
+    x, y float64
+    r float64
+}
 
-    fmt.Println(a, *b)
-
-    var c **int = &b;
-
-    fmt.Println(a, *b, **c)
-
-    **c++
-
-    fmt.Println(a, *b, **c)
-    fmt.Println(b, *c, c)
-
+func (circle Circle) GetArea() float64 {
+    return math.Pi * circle.r * circle.r
 }
