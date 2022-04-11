@@ -1,20 +1,18 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
-	"math"
+	"os"
 )
 
 func main() {
-	object := Circle{0, 0, 5}
-    fmt.Println(object.GetArea())
-}
+    var text string
 
-type Circle struct {
-    x, y float64
-    r float64
-}
+    ioScanner := bufio.NewScanner(os.Stdin)
+    
+    ioScanner.Scan()
+    text = ioScanner.Text()
 
-func (circle Circle) GetArea() float64 {
-    return math.Pi * circle.r * circle.r
+    fmt.Println(text)
 }
