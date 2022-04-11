@@ -4,15 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"unicode"
 )
 
 func main() {
-    var text string
+    var text []rune
 
     ioScanner := bufio.NewScanner(os.Stdin)
     
     ioScanner.Scan()
-    text = ioScanner.Text()
+    text = []rune(ioScanner.Text())
 
-    fmt.Println(text)
+    if (unicode.IsUpper(text[0]) && text[len(text) - 1] == '.') {
+        fmt.Println("Right")
+    } else {
+        fmt.Println("Wrong")
+    }
 }
