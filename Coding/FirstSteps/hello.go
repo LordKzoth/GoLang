@@ -4,20 +4,21 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
+	"strings"
 )
 
 func main() {
-    ioScanner := bufio.NewScanner(os.Stdin)
-    ioScanner.Scan()
-
-    text := []rune(ioScanner.Text())
-
-    for i := 0; i < len(text) / 2; i++ {
-        if !(text[i] == text[len(text) - 1 - i]) {
-            fmt.Println("Нет")
-            return
-        }
+    inScanner := bufio.NewScanner(os.Stdin)
+    inScanner.Scan()
+    
+    text := inScanner.Text()
+    
+    nums := make([]float64, 0)
+    for _, value := range strings.Split(text, ";") {
+        tempValue, _ := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(value, " ", ""), ",", "."), 64)
+        nums = append(nums, tempValue)
     }
 
-    fmt.Println("Палиндром")
+    fmt.Printf("%.4f", nums[0] / nums[1])
 }
