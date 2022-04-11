@@ -4,20 +4,20 @@ import (
 	"bufio"
 	"fmt"
 	"os"
-	"unicode"
 )
 
 func main() {
-    var text []rune
-
     ioScanner := bufio.NewScanner(os.Stdin)
-    
     ioScanner.Scan()
-    text = []rune(ioScanner.Text())
 
-    if (unicode.IsUpper(text[0]) && text[len(text) - 1] == '.') {
-        fmt.Println("Right")
-    } else {
-        fmt.Println("Wrong")
+    text := []rune(ioScanner.Text())
+
+    for i := 0; i < len(text) / 2; i++ {
+        if !(text[i] == text[len(text) - 1 - i]) {
+            fmt.Println("Нет")
+            return
+        }
     }
+
+    fmt.Println("Палиндром")
 }
