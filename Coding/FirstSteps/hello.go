@@ -1,42 +1,32 @@
 package main
 
 import (
-	"bufio"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"os"
 )
 
-type MyStruct struct {
-    Students []struct {
-        Rating []float64
-    }
-}
-
-type Result struct {
-    Average float64
+type MyJsonFile struct {
+    ID int64 `json:"global_id"`
 }
 
 func main() {
-	data, err := ioutil.ReadAll(os.Stdin)
+	var myJsonFile []MyJsonFile
+
+    file, err := os.Open("data-20190514T0100.json")
     if err != nil {
         panic(err)
     }
+    defer file.Close()
+    
+    data, _ := ioutil.ReadAll(file)
+    json.Unmarshal(data, &myJsonFile)
 
-    var myStruct MyStruct
-    json.Unmarshal(data, &myStruct)
-
-    var marksCount, studentsCount float64
-    for _, arr := range myStruct.Students {
-        marksCount += float64(len(arr.Rating))
-        studentsCount++
+    var sum int64
+    for _, value := range myJsonFile {
+        sum += value.ID
     }
 
-    result := Result{
-        Average: marksCount / studentsCount,
-    }
-    jsonData, _ := json.MarshalIndent(&result, "", "\t")
-    wr := bufio.NewWriter(os.Stdout)
-    wr.Write(jsonData)
-    wr.Flush()
+    fmt.Println(sum)
 }
