@@ -29,12 +29,6 @@ type WiFiNetwork struct {
 	WlanStandart 			[]string
 }
 
-type WiFiNetworkTools interface {
-	// = Information
-	PrintWiFiInfo()
-	FindPassword() string
-}
-
 // === DEFINITION PART ===
 func (wifi WiFiNetwork) PrintWiFiInfo() {
 	// = Set Color
