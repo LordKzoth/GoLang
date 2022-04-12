@@ -1,47 +1,31 @@
 package main
 
 import (
-	"archive/zip"
-	"bufio"
+	"bytes"
 	"fmt"
+	"io"
+	"os"
 	"strings"
 )
 
 func main() {
-	archive, err := zip.OpenReader("test.zip")
-
+	file, err := os.Open("task.txt")
     if err != nil {
         panic(err)
     }
+    defer file.Close()
 
-    for _, file := range archive.File {
-        // Skip directories
-        if file.FileInfo().IsDir() {
-            continue
+
+    buf := bytes.NewBuffer(nil)
+    io.Copy(buf, file)
+
+    index := 1
+    for _, num := range strings.Split(buf.String(), ";") {
+        if num == "0" {
+            fmt.Println(index)
+            break
         }
 
-        // Read .csv file
-        fileInArchive, err := file.Open()
-        if err != nil {
-            panic(err)
-        }
-        defer fileInArchive.Close()
-
-        ioScanner := bufio.NewScanner(fileInArchive)
-
-        row := 0
-        for ioScanner.Scan() {
-            line := ioScanner.Text()
-
-            // Search 5th row (Index = 4)
-            if row != 4 {
-                row++
-                continue
-            } else {
-                fmt.Println(strings.Split(line, ",")[2])
-                break
-            }
-        }
-
+        index++
     }
 }
