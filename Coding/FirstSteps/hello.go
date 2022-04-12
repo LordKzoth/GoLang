@@ -2,23 +2,27 @@ package main
 
 import (
 	"bufio"
-	"fmt"
+	"io"
 	"os"
 	"strconv"
-	"strings"
 )
 
 func main() {
-    inScanner := bufio.NewScanner(os.Stdin)
-    inScanner.Scan()
+    rd := bufio.NewReader(os.Stdin)
+    wr := bufio.NewWriter(os.Stdout)
     
-    text := inScanner.Text()
-    
-    nums := make([]float64, 0)
-    for _, value := range strings.Split(text, ";") {
-        tempValue, _ := strconv.ParseFloat(strings.ReplaceAll(strings.ReplaceAll(value, " ", ""), ",", "."), 64)
-        nums = append(nums, tempValue)
+    var sum int
+    for {
+        num, err := rd.ReadString('\n')
+
+        if err != io.EOF {
+            conv, _ := strconv.Atoi(string(num[:len(num) - 2]))
+            sum += conv
+        } else {
+            break
+        }
     }
 
-    fmt.Printf("%.4f", nums[0] / nums[1])
+    wr.WriteString(strconv.Itoa(sum))
+    wr.Flush()
 }
