@@ -1,28 +1,47 @@
 package main
 
 import (
+	"archive/zip"
 	"bufio"
-	"io"
-	"os"
-	"strconv"
+	"fmt"
+	"strings"
 )
 
 func main() {
-    rd := bufio.NewReader(os.Stdin)
-    wr := bufio.NewWriter(os.Stdout)
-    
-    var sum int
-    for {
-        num, err := rd.ReadString('\n')
+	archive, err := zip.OpenReader("test.zip")
 
-        if err != io.EOF {
-            conv, _ := strconv.Atoi(string(num[:len(num) - 2]))
-            sum += conv
-        } else {
-            break
-        }
+    if err != nil {
+        panic(err)
     }
 
-    wr.WriteString(strconv.Itoa(sum))
-    wr.Flush()
+    for _, file := range archive.File {
+        // Skip directories
+        if file.FileInfo().IsDir() {
+            continue
+        }
+
+        // Read .csv file
+        fileInArchive, err := file.Open()
+        if err != nil {
+            panic(err)
+        }
+        defer fileInArchive.Close()
+
+        ioScanner := bufio.NewScanner(fileInArchive)
+
+        row := 0
+        for ioScanner.Scan() {
+            line := ioScanner.Text()
+
+            // Search 5th row (Index = 4)
+            if row != 4 {
+                row++
+                continue
+            } else {
+                fmt.Println(strings.Split(line, ",")[2])
+                break
+            }
+        }
+
+    }
 }
