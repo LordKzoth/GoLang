@@ -1,31 +1,42 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"io"
+	"bufio"
+	"encoding/json"
+	"io/ioutil"
 	"os"
-	"strings"
 )
 
+type MyStruct struct {
+    Students []struct {
+        Rating []float64
+    }
+}
+
+type Result struct {
+    Average float64
+}
+
 func main() {
-	file, err := os.Open("task.txt")
+	data, err := ioutil.ReadAll(os.Stdin)
     if err != nil {
         panic(err)
     }
-    defer file.Close()
 
+    var myStruct MyStruct
+    json.Unmarshal(data, &myStruct)
 
-    buf := bytes.NewBuffer(nil)
-    io.Copy(buf, file)
-
-    index := 1
-    for _, num := range strings.Split(buf.String(), ";") {
-        if num == "0" {
-            fmt.Println(index)
-            break
-        }
-
-        index++
+    var marksCount, studentsCount float64
+    for _, arr := range myStruct.Students {
+        marksCount += float64(len(arr.Rating))
+        studentsCount++
     }
+
+    result := Result{
+        Average: marksCount / studentsCount,
+    }
+    jsonData, _ := json.MarshalIndent(&result, "", "\t")
+    wr := bufio.NewWriter(os.Stdout)
+    wr.Write(jsonData)
+    wr.Flush()
 }
