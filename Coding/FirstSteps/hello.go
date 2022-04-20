@@ -1,32 +1,38 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
 )
 
-type MyJsonFile struct {
-    ID int64 `json:"global_id"`
+func main() {
+    c   := make(chan int)
+    end := make(chan int)
+
+    
+    go func(){
+        for {
+            select {
+                case value := <- c: {
+                    fmt.Println(value)
+                }
+                case <- end: {
+                    fmt.Println("Process complited!")
+                    break
+                }
+            }
+        }
+    } ()
+
+    squares(c, end)
 }
 
-func main() {
-	var myJsonFile []MyJsonFile
+func squares(c chan int, end chan int) {
+    defer close(c)
+    defer close(end)
 
-    file, err := os.Open("data-20190514T0100.json")
-    if err != nil {
-        panic(err)
-    }
-    defer file.Close()
-    
-    data, _ := ioutil.ReadAll(file)
-    json.Unmarshal(data, &myJsonFile)
-
-    var sum int64
-    for _, value := range myJsonFile {
-        sum += value.ID
+    for i := 1; i < 10; i++ {
+        c <- i * i
     }
 
-    fmt.Println(sum)
+    end <- 0
 }
