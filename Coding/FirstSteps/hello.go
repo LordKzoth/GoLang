@@ -2,37 +2,71 @@ package main
 
 import (
 	"fmt"
+	"math/rand"
+	"sync"
+	"time"
 )
 
 func main() {
-    c   := make(chan int)
-    end := make(chan int)
+	in1  := make(chan int)
+	in2  := make(chan int)
+	done := make(chan struct{})
 
-    
-    go func(){
-        for {
-            select {
-                case value := <- c: {
-                    fmt.Println(value)
-                }
-                case <- end: {
-                    fmt.Println("Process complited!")
-                    break
-                }
-            }
-        }
-    } ()
+	go GoChannels(in1, in2, done)
 
-    squares(c, end)
+	for i := 0; i < 10; i++ {
+		in1 <- i
+		in2 <- i*2
+	}
+
+	<- done
 }
 
-func squares(c chan int, end chan int) {
-    defer close(c)
-    defer close(end)
+func GoChannels(in1 chan int, in2 chan int, done chan struct{}) {
+	valuesFrom1 := make([]int, 0, 10)
+	valuesFrom2 := make([]int, 0, 10)
 
-    for i := 1; i < 10; i++ {
-        c <- i * i
-    }
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
 
-    end <- 0
+	go func(){
+		defer wg.Done()
+		
+		for i := 0; i < 10; i++ {
+			valuesFrom1 = append(valuesFrom1, <-in1)
+			valuesFrom2 = append(valuesFrom2, <-in2)
+		}
+	} ()
+
+	wg.Wait()
+	fmt.Println(valuesFrom1)
+	fmt.Println(valuesFrom2)
+
+	for i := 0; i < 10; i++ {
+		wg.Add(1)
+		go func(_i int) {
+			defer wg.Done()
+
+			valuesFrom1[_i] = LongProcess(valuesFrom1[_i])
+		} (i)
+
+		wg.Add(1)
+		go func(_i int) {
+			defer wg.Done()
+
+			valuesFrom2[_i] = LongProcess(valuesFrom2[_i])
+		} (i)
+	}
+
+	wg.Wait()
+
+	fmt.Println(valuesFrom1)
+	fmt.Println(valuesFrom2)
+
+	done <- struct{}{}
 }
+
+func LongProcess(x int) int {
+	time.Sleep(time.Duration(rand.Int31n(10)) * time.Second)
+	return x * (-1)
+ }
