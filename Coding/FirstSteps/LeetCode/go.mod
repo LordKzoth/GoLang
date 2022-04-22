@@ -1,3 +1,3 @@
-module main
+module leetcode
 
 go 1.18
