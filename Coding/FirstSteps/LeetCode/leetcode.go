@@ -9,51 +9,36 @@ func longestPalindrome(s string) string {
 	}
 
 	// Len = 1
-	var maxLen, currentLen, start int
+	maxLen, start := 1, 0
 
-	for j := 0; j < sLen; j++ {
-		for i := j; i < sLen; i++ {
-			if s[i] == s[j] {
+	for i := 0; i < sLen; i++ {
+		dp[i][i] = true
+	}
+
+	// Len = 2
+	for i := 0; i < sLen-1; i++ {
+		if s[i] == s[i+1] {
+			dp[i][i+1] = true
+			maxLen = 2
+			start = i
+		}
+	}
+
+	// Len > 2
+	for k := 3; k <= sLen; k++ {
+		for i := 0; i < sLen-k+1; i++ {
+			j := i + k - 1
+
+			if dp[i+1][j-1] && s[i] == s[j] {
 				dp[i][j] = true
-			}
 
-			if j != i {
-				continue
-			}
-
-			// Set start Len
-			if currentLen == 0 && j >= currentLen+1 && dp[i][j-1] { // EVEN
-				currentLen = 2
-
-			} else if currentLen == 0 && j >= currentLen+2 && dp[i][j-2] { // ODD
-				currentLen = 3
-
-			} else { // Find next point
-				if currentLen != 0 && j >= currentLen+1 && dp[i][j-(currentLen+1)] {
-					currentLen += 2
-				}
-			}
-
-			if currentLen > maxLen {
-				start = i - currentLen + 1
-				maxLen = currentLen
-			} else {
-				if j >= 1 && dp[i][j-1] { // EVEN
-					currentLen = 2
-
-				} else if j >= 2 && dp[i][j-2] { // ODD
-					currentLen = 3
-
-				} else {
-					currentLen = 0
+				if k > maxLen {
+					maxLen = k
+					start = i
 				}
 			}
 		}
 	}
 
-	if maxLen == 0 {
-		return string(s[0])
-	} else {
-		return s[start : start+maxLen]
-	}
+	return s[start : start+maxLen]
 }

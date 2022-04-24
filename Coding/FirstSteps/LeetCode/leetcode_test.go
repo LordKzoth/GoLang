@@ -11,6 +11,7 @@ type addTest struct {
 
 var addTests = []addTest {
 	addTest{"dodosso", "osso"},
+	addTest{"ababababa", "ababababa"},
 	addTest{"babad", "bab"},
 	addTest{"babads", "bab"},
 	addTest{"cbbd", "bb"},
@@ -23,6 +24,16 @@ var addTests = []addTest {
 	addTest{"dasa", "asa"},
 	addTest{"dassa", "assa"},
 	addTest{"dasaa", "asa"},
+	addTest{"daasaa", "aasaa"},
+	addTest{"dasaaa", "asa"},
+	addTest{"ccc", "ccc"},
+	addTest{"accca", "accca"},
+	addTest{"acccca", "acccca"},
+	addTest{"cccc", "cccc"},
+	addTest{"ccccc", "ccccc"},
+	addTest{"cccccc", "cccccc"},
+	addTest{"ccccccc", "ccccccc"},
+	addTest{"cccccccc", "cccccccc"},
 }
 
 // Table-Driven Test
