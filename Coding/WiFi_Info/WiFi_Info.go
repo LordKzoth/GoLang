@@ -26,24 +26,8 @@ func main() {
 
 	`)
 
-	// = Change cmd Language (RU - EN)
-	{
-		command 		:= exec.Command("chcp", "437")
-		_, issueChcp	:= command.Output()
-	
-		if issueChcp != nil {
-			fmt.Println(issueChcp.Error())
-			return
-		}
-	}
-
-	// == Trash Code for Antivirus evasion
-	if true {
-		var a, b int = 1, 1
-		for index := 0; index < 100; index++ {
-			b, a = a + b, b
-		}
-	}
+	ChangeCmdLanguage("437")
+	defer ChangeCmdLanguage("866")
 	
 	// = Get Information about local WLANS
 	// == Read information from Netsh Output
@@ -101,15 +85,12 @@ func main() {
 		fmt.Printf("\n= %d =\n", index + 1)
 		wlan.PrintWiFiInfo()
 	}
+}
 
-	// = Change cmd Language (EN - RU)
-	{
-		command 		:= exec.Command("chcp", "866")
-		_, issueChcp	:= command.Output()
-	
-		if issueChcp != nil {
-			fmt.Println(issueChcp.Error())
-			return
-		}
-	}
+func ChangeCmdLanguage(charset string) {
+	// RU - 866
+	// EN - 437
+
+	command := exec.Command("chcp", charset) 
+	command.Run()
 }
