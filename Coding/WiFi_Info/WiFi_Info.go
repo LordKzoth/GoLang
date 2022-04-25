@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 )
 
 var (
@@ -25,6 +26,7 @@ func main() {
 		================================
 
 	`)
+	wg := new(sync.WaitGroup)
 
 	ChangeCmdLanguage("437")
 	defer ChangeCmdLanguage("866")
@@ -48,7 +50,13 @@ func main() {
 			wlans = append(wlans, WiFiNetwork{SSID: temp[len(temp) - 1]})
 			
 			// === Find Password (In PC memory)
-			wlans[len(wlans) - 1].Password = wlans[len(wlans) - 1].FindPassword()
+			wg.Add(1)
+			go func(_length int) {
+				defer wg.Done()
+
+				wlans[_length].Password = wlans[_length].FindPassword()
+			} (len(wlans) - 1)
+			
 		} else {
 			switch {
 			case strings.Contains(line, "Authentication"):
@@ -74,6 +82,8 @@ func main() {
 			}
 		}
 	}
+
+	wg.Wait()
 
 	// == Sort WLANs by Signal
 	sort.Slice(wlans, func(i, j int) bool {
