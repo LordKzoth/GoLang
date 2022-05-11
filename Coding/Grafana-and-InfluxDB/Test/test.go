@@ -1,20 +1,30 @@
 package main
 
 import (
+	"context"
 	"fmt"
-	influxdb2 "github.com/influxdata/influxdb-client-go/v2"
+	"github.com/influxdata/influxdb-client-go/v2"
 )
 
-func main() {
-	name1, err := connectToInfluxDbClient()
-	if err != nil {
-		panic("Error!")
-	}
+// Connection Data
+const token = "B7vskD5298p5TwvRHrQpnzTaw7tXMtR3WLKwv4qIcOu-AGe0yuB5DV_dAalYczs6VtgaP40G7SWSyRd4ViBdpw=="
 
-	fmt.Println(name1)
+//const bucket = "Entry"
+//const org = "KLegion"
+
+func main() {
+	dbConnection, err := connectToInfluxDbClient()
+	defer dbConnection.Close()
+	if err != nil {
+		panic("connection error occurred")
+	} else {
+		fmt.Println("[OK] Connection info: ", dbConnection)
+	}
 }
 
 func connectToInfluxDbClient() (influxdb2.Client, error) {
+	client := influxdb2.NewClient("http://localhost:8086", token)
+	_, err := client.Health(context.Background())
 
-	return influxdb2.NewClient("kek", "lol"), nil
+	return client, err
 }
